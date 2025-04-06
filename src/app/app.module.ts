@@ -3,6 +3,7 @@ import { BrowserModule, provideClientHydration, withEventReplay } from '@angular
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { provideHttpClient , withFetch } from '@angular/common/http';
 
 // ✅ Import AuthModule
 import { AuthModule } from './auth/auth.module';
@@ -17,7 +18,8 @@ import { AuthModule } from './auth/auth.module';
     AuthModule // ✅ Add this so Angular recognizes LoginAdminComponent, FormsModule, etc.
   ],
   providers: [
-    provideClientHydration(withEventReplay())
+    provideClientHydration(withEventReplay()),
+    provideHttpClient(withFetch())
   ],
   bootstrap: [AppComponent]
 })
