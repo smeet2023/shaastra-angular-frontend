@@ -4,6 +4,7 @@ import { AuthService, AuthRequest } from '../auth.service';
 
 @Component({
   selector: 'app-login-admin',
+  standalone: false,
   templateUrl: './login-admin.component.html',
   styleUrls: ['./login-admin.component.scss']
 })

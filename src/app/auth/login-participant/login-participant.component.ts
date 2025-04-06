@@ -4,6 +4,7 @@ import { AuthService, AuthRequest } from '../auth.service';
 
 @Component({
   selector: 'app-login-participant',
+  standalone: false,
   templateUrl: './login-participant.component.html',
   styleUrls: ['./login-participant.component.scss']
 })

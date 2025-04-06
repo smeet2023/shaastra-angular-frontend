@@ -4,13 +4,17 @@ import { BrowserModule, provideClientHydration, withEventReplay } from '@angular
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+// ✅ Import AuthModule
+import { AuthModule } from './auth/auth.module';
+
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    AuthModule // ✅ Add this so Angular recognizes LoginAdminComponent, FormsModule, etc.
   ],
   providers: [
     provideClientHydration(withEventReplay())
