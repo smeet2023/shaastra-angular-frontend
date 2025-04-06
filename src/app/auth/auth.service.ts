@@ -45,7 +45,6 @@ export class AuthService {
         })
       );
   }
-
   // Utility methods to get token
   getAdminToken(): string | null {
     return localStorage.getItem('admin_token');
@@ -60,4 +59,20 @@ export class AuthService {
     localStorage.removeItem('admin_token');
     localStorage.removeItem('participant_token');
   }
+  // Example methods in AuthService
+  
+  isAuthenticated(): boolean {
+    // Return true if an admin or participant token is present in localStorage
+    return !!(localStorage.getItem('admin_token') || localStorage.getItem('participant_token'));
+  }
+  
+  hasRole(role: string): boolean {
+    // Implement your role checking logic.
+    // For example, you might decode the JWT token and check the role,
+    // or you could store the role in localStorage after login.
+    const token = localStorage.getItem(role === 'ADMIN' ? 'admin_token' : 'participant_token');
+    // If token exists, assume the role is correct for this simple example.
+    return !!token;
+  }
 }
+
