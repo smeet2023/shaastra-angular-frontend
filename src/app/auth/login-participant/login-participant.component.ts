@@ -4,12 +4,12 @@ import { AuthService, AuthRequest } from '../auth.service';
 
 @Component({
   selector: 'app-login-participant',
-  standalone: false,
+  standalone : false,
   templateUrl: './login-participant.component.html',
   styleUrls: ['./login-participant.component.scss']
 })
 export class LoginParticipantComponent {
-  shId: string = '';   // for participants, username is the sh_id from Student entity
+  shId: string = '';   // For participants, this is the Student's sh_id
   password: string = '';
   errorMessage: string = '';
 
@@ -20,8 +20,8 @@ export class LoginParticipantComponent {
     this.authService.participantLogin(credentials).subscribe({
       next: response => {
         if (response.jwt) {
-          // Navigate to participant dashboard or home page after login
-          this.router.navigate(['/student/dashboard']);
+          this.authService.loginSuccess(response.jwt, this.shId, 'participant');
+          this.router.navigate(['/participant/dashboard']);
         } else {
           this.errorMessage = response.message || 'Unknown error';
         }

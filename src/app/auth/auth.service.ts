@@ -17,7 +17,6 @@ export interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
-
   private apiUrl = environment.apiUrl; // e.g., 'http://localhost:8080'
 
   constructor(private http: HttpClient) { }
@@ -28,7 +27,8 @@ export class AuthService {
       .pipe(
         tap(response => {
           if (response.jwt) {
-            localStorage.setItem('admin_token', response.jwt);
+            // Store admin token and details in separate keys
+            this.loginSuccess(response.jwt, credentials.username, 'admin');
           }
         })
       );
@@ -40,39 +40,68 @@ export class AuthService {
       .pipe(
         tap(response => {
           if (response.jwt) {
-            localStorage.setItem('participant_token', response.jwt);
+            // Store participant token and details in separate keys
+            this.loginSuccess(response.jwt, credentials.username, 'participant');
           }
         })
       );
   }
-  // Utility methods to get token
-  getAdminToken(): string | null {
-    return localStorage.getItem('admin_token');
+
+  // Store login data separately based on role
+  loginSuccess(token: string, username: string, role: string): void {
+    if (role === 'admin') {
+      localStorage.setItem('admin_token', token);
+      localStorage.setItem('admin_username', username);
+      localStorage.setItem('admin_role', role);
+    } else if (role === 'participant') {
+      localStorage.setItem('participant_token', token);
+      localStorage.setItem('participant_username', username);
+      localStorage.setItem('participant_role', role);
+    }
   }
 
-  getParticipantToken(): string | null {
-    return localStorage.getItem('participant_token');
+  // Getters for admin/participant usernames
+  getAdminUsername(): string {
+    return localStorage.getItem('admin_username') || '';
+  }
+  getParticipantUsername(): string {
+    return localStorage.getItem('participant_username') || '';
   }
 
-  // Log out method
-  logout(): void {
-    localStorage.removeItem('admin_token');
-    localStorage.removeItem('participant_token');
+  // Separate authentication check for each role
+  isAuthenticatedForRole(role: 'admin' | 'participant'): boolean {
+    if (role === 'admin') {
+      return !!localStorage.getItem('admin_token');
+    } else if (role === 'participant') {
+      return !!localStorage.getItem('participant_token');
+    }
+    return false;
   }
-  // Example methods in AuthService
-  
+
+  // Logout only for the specified role
+  logout(role: 'admin' | 'participant'): void {
+    if (role === 'admin') {
+      localStorage.removeItem('admin_token');
+      localStorage.removeItem('admin_username');
+      localStorage.removeItem('admin_role');
+    } else if (role === 'participant') {
+      localStorage.removeItem('participant_token');
+      localStorage.removeItem('participant_username');
+      localStorage.removeItem('participant_role');
+    }
+  }
+
+  // Global authentication (if needed)
   isAuthenticated(): boolean {
-    // Return true if an admin or participant token is present in localStorage
     return !!(localStorage.getItem('admin_token') || localStorage.getItem('participant_token'));
   }
-  
+
+  // Role check (if needed)
   hasRole(role: string): boolean {
-    // Implement your role checking logic.
-    // For example, you might decode the JWT token and check the role,
-    // or you could store the role in localStorage after login.
-    const token = localStorage.getItem(role === 'ADMIN' ? 'admin_token' : 'participant_token');
-    // If token exists, assume the role is correct for this simple example.
-    return !!token;
+    if (role.toLowerCase() === 'admin') {
+      return !!localStorage.getItem('admin_token');
+    } else {
+      return !!localStorage.getItem('participant_token');
+    }
   }
 }
-

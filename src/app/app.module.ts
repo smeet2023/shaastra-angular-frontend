@@ -7,14 +7,16 @@ import { provideHttpClient , withFetch } from '@angular/common/http';
 
 // ✅ Import AuthModule
 import { AuthModule } from './auth/auth.module';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './home/home.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { ParticipantDashboardComponent } from './participant-dashboard/participant-dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
-    HomeComponent
+    HomeComponent,
+    AdminDashboardComponent,
+    ParticipantDashboardComponent
   ],
   imports: [
     BrowserModule,

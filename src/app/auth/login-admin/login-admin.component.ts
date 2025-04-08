@@ -4,7 +4,7 @@ import { AuthService, AuthRequest } from '../auth.service';
 
 @Component({
   selector: 'app-login-admin',
-  standalone: false,
+  standalone : false,
   templateUrl: './login-admin.component.html',
   styleUrls: ['./login-admin.component.scss']
 })
@@ -20,7 +20,9 @@ export class LoginAdminComponent {
     this.authService.adminLogin(credentials).subscribe({
       next: response => {
         if (response.jwt) {
-          // Navigate to admin dashboard or home page after login
+          // Store token, username, and role via your AuthService's loginSuccess method.
+          this.authService.loginSuccess(response.jwt, this.username, 'admin');
+          // Navigate to admin dashboard.
           this.router.navigate(['/admin/dashboard']);
         } else {
           this.errorMessage = response.message || 'Unknown error';
