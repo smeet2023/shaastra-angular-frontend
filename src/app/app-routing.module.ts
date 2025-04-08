@@ -15,13 +15,13 @@ const routes: Routes = [
     path: 'admin/dashboard', 
     component: AdminDashboardComponent,
     canActivate: [AuthGuard],
-    data: { expectedRole: 'ADMIN' }
+    data: { expectedRole: 'admin' }
   },
   { 
     path: 'participant/dashboard', 
     component: ParticipantDashboardComponent,
     canActivate: [AuthGuard],
-    data: { expectedRole: 'PARTICIPANT' }
+    data: { expectedRole: 'participant' }
   },
   { path: '**', redirectTo: '' }
 ];

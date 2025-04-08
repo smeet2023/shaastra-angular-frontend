@@ -17,68 +17,76 @@ export interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = environment.apiUrl; // e.g., 'http://localhost:8080'
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
-  // Admin login
+  // Admin login: store admin-specific keys
   adminLogin(credentials: AuthRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/admin/login`, credentials)
       .pipe(
         tap(response => {
           if (response.jwt) {
-            // Store admin token and details in separate keys
-            this.loginSuccess(response.jwt, credentials.username, 'admin');
+            localStorage.setItem('admin_token', response.jwt);
+            localStorage.setItem('admin_username', credentials.username);
+            localStorage.setItem('admin_role', 'admin');
           }
         })
       );
   }
 
-  // Contest Participant login
+  // Participant login: store participant-specific keys
   participantLogin(credentials: AuthRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/participant/login`, credentials)
       .pipe(
         tap(response => {
           if (response.jwt) {
-            // Store participant token and details in separate keys
-            this.loginSuccess(response.jwt, credentials.username, 'participant');
+            localStorage.setItem('participant_token', response.jwt);
+            localStorage.setItem('participant_username', credentials.username);
+            localStorage.setItem('participant_role', 'participant');
           }
         })
       );
   }
 
-  // Store login data separately based on role
-  loginSuccess(token: string, username: string, role: string): void {
-    if (role === 'admin') {
-      localStorage.setItem('admin_token', token);
-      localStorage.setItem('admin_username', username);
-      localStorage.setItem('admin_role', role);
-    } else if (role === 'participant') {
-      localStorage.setItem('participant_token', token);
-      localStorage.setItem('participant_username', username);
-      localStorage.setItem('participant_role', role);
-    }
+  // Role-specific token getters
+  getAdminToken(): string | null {
+    return localStorage.getItem('admin_token');
+  }
+  getParticipantToken(): string | null {
+    return localStorage.getItem('participant_token');
   }
 
-  // Getters for admin/participant usernames
+  // Role-specific username getters
   getAdminUsername(): string {
-    return localStorage.getItem('admin_username') || '';
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return localStorage.getItem('admin_username') || '';
+    }
+    return '';
   }
+  
   getParticipantUsername(): string {
-    return localStorage.getItem('participant_username') || '';
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return localStorage.getItem('participant_username') || '';
+    }
+    return '';
   }
+  
 
-  // Separate authentication check for each role
+  // Check if authenticated for a given role
   isAuthenticatedForRole(role: 'admin' | 'participant'): boolean {
-    if (role === 'admin') {
-      return !!localStorage.getItem('admin_token');
-    } else if (role === 'participant') {
-      return !!localStorage.getItem('participant_token');
+    if (typeof window !== 'undefined' && window.localStorage) {
+      if (role === 'admin') {
+        return !!localStorage.getItem('admin_token');
+      } else {
+        return !!localStorage.getItem('participant_token');
+      }
     }
     return false;
   }
+  
 
-  // Logout only for the specified role
+  // Logout for specified role; remove only that role's keys
   logout(role: 'admin' | 'participant'): void {
     if (role === 'admin') {
       localStorage.removeItem('admin_token');
@@ -90,13 +98,23 @@ export class AuthService {
       localStorage.removeItem('participant_role');
     }
   }
-
-  // Global authentication (if needed)
+  loginSuccess(token: string, username: string, role: string): void {
+    if (role === 'admin') {
+      localStorage.setItem('admin_token', token);
+      localStorage.setItem('admin_username', username);
+      localStorage.setItem('admin_role', role);
+    } else if (role === 'participant') {  
+      localStorage.setItem('participant_token', token);
+      localStorage.setItem('participant_username', username);
+      localStorage.setItem('participant_role', role);
+    }
+  }
+  // Global authentication check if needed (optional)
   isAuthenticated(): boolean {
     return !!(localStorage.getItem('admin_token') || localStorage.getItem('participant_token'));
   }
 
-  // Role check (if needed)
+  // Check role based on stored data
   hasRole(role: string): boolean {
     if (role.toLowerCase() === 'admin') {
       return !!localStorage.getItem('admin_token');

@@ -9,11 +9,14 @@ import { AuthService } from '../auth/auth.service';
 })
 export class AdminDashboardComponent implements OnInit {
   username: string = '';
+  userrole: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.username = this.authService.getAdminUsername();
+    this.userrole = localStorage.getItem('role') || 'admin';
+
   }
 
   logout(): void {
