@@ -1,22 +1,35 @@
 <div class="admin-layout">
   <!-- Top Navbar -->
   <header class="admin-navbar">
+    <!-- Left Section: Hamburger Icon and Logo -->
     <div class="navbar-left">
       <button class="collapse-btn" (click)="toggleSidebar()">
         <!-- Using Unicode hamburger icon -->
         <span *ngIf="!isCollapsed">☰</span>
-        <span *ngIf="isCollapsed">&#9776;</span> <!-- They are similar, you can tweak this if you want different icons -->
+        <span *ngIf="isCollapsed">&#9776;</span>
       </button>
-      <div class="logo">Contest Admin</div>
+      <div class="logo">Shaastra Coding</div>
+    </div>
+    
+    <!-- Center Section: Page Title -->
+    <div class="navbar-center">
       <div class="page-title">Dashboard</div>
     </div>
+    
+    <!-- Right Section: Admin Info and Logout -->
     <div class="navbar-right">
       <div class="admin-info">
         <span class="welcome-text">Welcome, {{ adminName }}</span>
-        <button class="logout-btn" (click)="logout()">Logout</button>
+        <button class="logout-btn" (click)="openConfirm()">Logout</button>
       </div>
     </div>
   </header>
+  <!-- Include confirmation dialog if showConfirmDialog is true -->
+  <app-confirmation-dialog 
+  *ngIf="showConfirmDialog" 
+  (confirmed)="handleConfirm($event)">
+</app-confirmation-dialog>
+  
   <!-- Sidebar and Main Content -->
   <div class="admin-body">
     <!-- Sidebar Navigation -->
