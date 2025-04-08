@@ -1,4 +1,45 @@
-<div class="dashboard">
-  <h2>Welcome, {{ username }} (Admin)!</h2>
-  <button (click)="logout()">Logout</button>
+<div class="admin-layout">
+  <!-- Top Navbar -->
+  <header class="admin-navbar">
+    <div class="navbar-left">
+      <button class="collapse-btn" (click)="toggleSidebar()">
+        <!-- Using Unicode hamburger icon -->
+        <span *ngIf="!isCollapsed">☰</span>
+        <span *ngIf="isCollapsed">&#9776;</span> <!-- They are similar, you can tweak this if you want different icons -->
+      </button>
+      <div class="logo">Contest Admin</div>
+      <div class="page-title">Dashboard</div>
+    </div>
+    <div class="navbar-right">
+      <div class="admin-info">
+        <span class="welcome-text">Welcome, {{ adminName }}</span>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+  <!-- Sidebar and Main Content -->
+  <div class="admin-body">
+    <!-- Sidebar Navigation -->
+    <nav class="admin-sidebar" [class.collapsed]="isCollapsed">
+      <ul>
+        <li routerLinkActive="active">
+          <a routerLink="/admin/dashboard">Dashboard</a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="/admin/contests">Contests</a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="/admin/participants">Participants</a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="/admin/problems">Problems</a>
+        </li>
+      </ul>
+    </nav>
+    <!-- Main Content -->
+    <main class="admin-content">
+      <!-- Router outlet for loading child components -->
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>
