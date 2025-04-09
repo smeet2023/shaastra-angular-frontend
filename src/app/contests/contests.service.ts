@@ -13,6 +13,8 @@ export class ContestService {
 
   // Calls the backend endpoint to retrieve the recent contest participation summary.
   getRecentParticipationSummary(): Observable<{ appeared: number, notAppeared: number }> {
+    const url = `${environment.apiUrl}/api/contests/recent/participants-summary`;
+    console.log('Fetching participation summary from: ', url);
     return this.http.get<{ appeared: number, notAppeared: number }>(`${this.apiUrl}/api/contests/recent/participants-summary`);
   }
 }

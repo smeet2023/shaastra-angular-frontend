@@ -1,75 +1,74 @@
-// import { Component, OnInit } from '@angular/core';
-// import { Router } from '@angular/router';
-// import { AuthService } from '../auth/auth.service';
-
-// @Component({
-//   selector: 'app-admin-dashboard',standalone:false,
-//   templateUrl: './admin-dashboard.component.html',
-//   styleUrls: ['./admin-dashboard.component.scss']
-// })
-// export class AdminDashboardComponent implements OnInit {
-//   username: string = '';
-//   userrole: string = '';
-
-//   constructor(private authService: AuthService, private router: Router) {}
-
-//   ngOnInit(): void {
-//     this.username = this.authService.getAdminUsername();
-//     this.userrole = localStorage.getItem('role') || 'admin';
-
-//   }
-
-//   logout(): void {
-//     this.authService.logout('admin');
-//     this.router.navigate(['/']);
-//   }
-// }
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
-import * as ngxCharts from '@swimlane/ngx-charts'; // Create a namespace alias
-// import { ConfirmationDialogComponent } from  
+import { ContestService } from '../contests/contests.service';  // Ensure this service is implemented
+
 @Component({
   selector: 'app-admin-dashboard',standalone:false,
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.scss']
 })
-export class AdminDashboardComponent {
+export class AdminDashboardComponent implements OnInit {
   adminName = '';
   isCollapsed = false;
   showConfirmDialog = false;
 
-  pieChartData = [
-    { name: 'Appeared', value: 80 },
-    { name: 'Not Appeared', value: 20 }
-  ];
-
+  // Pie chart data will be set once we fetch from the backend
+  pieChartData: any[] = [];
+  
+  // A proper Color object based on ngx-charts requirements
   colorScheme: Color = {
     name: 'customScheme',
-  selectable: true,
-  group: ScaleType.Ordinal,
-  domain: ['#4CAF50', '#F44336']
+    selectable: true,
+    group: ScaleType.Ordinal,
+    domain: ['#4CAF50', '#F44336']  // For example: green for "Appeared", red for "Not Appeared"
   };
 
-  constructor(private authService: AuthService, private router: Router) {
-    this.adminName = this.authService.getAdminUsername(); // Adjust if needed
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private contestService: ContestService
+  ) {
+    this.adminName = this.authService.getAdminUsername(); // Retrieves admin's username from storage
   }
-  navigateTo(path: string) {
+
+  ngOnInit(): void {
+    this.fetchChartData();
+  }
+
+  // Fetch chart data from the backend
+  fetchChartData(): void {
+    this.contestService.getRecentParticipationSummary().subscribe({
+      next: (data: {appeared: number, notAppeared: number}) => {
+        this.pieChartData = [
+          { name: 'Appeared', value: data.appeared },
+          { name: 'Not Appeared', value: data.notAppeared }
+        ];
+      },
+      error: (err) => {
+        console.error('Error fetching participation summary:', err);
+      }
+    });
+  }
+
+  // Navigation method for the dashboard create buttons
+  navigateTo(path: string): void {
     this.router.navigate([`/admin/${path}/create`]);
   }
+
+  openConfirm(): void {
+    this.showConfirmDialog = true;
+  }
+
   handleConfirm(confirmed: boolean): void {
-    // Hide the dialog first
     this.showConfirmDialog = false;
     if (confirmed) {
-      // Log out only if confirmed
       this.authService.logout('admin');
       this.router.navigate(['/auth/admin/login']);
     }
   }
-  openConfirm(): void {
-    this.showConfirmDialog = true;
-  }
+
   logout(): void {
     this.authService.logout('admin');
     this.router.navigate(['/auth/admin/login']);
