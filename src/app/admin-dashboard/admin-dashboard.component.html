@@ -51,6 +51,32 @@
     </nav>
     <!-- Main Content -->
     <main class="admin-content">
+      <div class="admin-dashboard-container">
+        <section class="actions-section">
+          <h2>Manage Entities</h2>
+          <div class="action-buttons">
+            <button (click)="navigateTo('participants')">Add Participant</button>
+            <button (click)="navigateTo('contests')">Add Contest</button>
+            <button (click)="navigateTo('contestproblems')">Add Contest Problems</button>
+            <button (click)="navigateTo('contestresults')">Add Contest Results</button>
+            <button (click)="navigateTo('solvedproblems')">Add Solved Problems</button>
+          </div>
+        </section>
+      
+        <section class="chart-section">
+          <h2>Recent Contest Participation</h2>
+          <ngx-charts-pie-chart 
+            [view]="[400, 400]"
+            [scheme]="colorScheme"
+            [results]="pieChartData"
+            [legend]="true"
+            [explodeSlices]="false"
+            [labels]="true"
+            [doughnut]="true">
+          </ngx-charts-pie-chart>
+        </section>
+      </div>
+      
       <!-- Router outlet for loading child components -->
       <router-outlet></router-outlet>
     </main>

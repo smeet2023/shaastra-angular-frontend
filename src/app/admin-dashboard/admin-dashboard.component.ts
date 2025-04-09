@@ -27,7 +27,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
-
+import { Color, ScaleType } from '@swimlane/ngx-charts';
+import * as ngxCharts from '@swimlane/ngx-charts'; // Create a namespace alias
 // import { ConfirmationDialogComponent } from  
 @Component({
   selector: 'app-admin-dashboard',standalone:false,
@@ -39,8 +40,23 @@ export class AdminDashboardComponent {
   isCollapsed = false;
   showConfirmDialog = false;
 
+  pieChartData = [
+    { name: 'Appeared', value: 80 },
+    { name: 'Not Appeared', value: 20 }
+  ];
+
+  colorScheme: Color = {
+    name: 'customScheme',
+  selectable: true,
+  group: ScaleType.Ordinal,
+  domain: ['#4CAF50', '#F44336']
+  };
+
   constructor(private authService: AuthService, private router: Router) {
     this.adminName = this.authService.getAdminUsername(); // Adjust if needed
+  }
+  navigateTo(path: string) {
+    this.router.navigate([`/admin/${path}/create`]);
   }
   handleConfirm(confirmed: boolean): void {
     // Hide the dialog first

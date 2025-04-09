@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { HomeComponent } from './home/home.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { ParticipantDashboardComponent } from './participant-dashboard/participant-dashboard.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ParticipantDashboardComponent } from './participant-dashboard/participa
     AppRoutingModule,
     SharedModule,
     RouterModule,
-    AuthModule // ✅ Add this so Angular recognizes LoginAdminComponent, FormsModule, etc.
+    AuthModule, // ✅ Add this so Angular recognizes LoginAdminComponent, FormsModule, etc.
+    NgxChartsModule
   ],
   providers: [
     provideClientHydration(withEventReplay()),
