@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
 import { ContestService } from '../contests/contests.service';  // Ensure this service is implemented
-
 @Component({
   selector: 'app-admin-dashboard',standalone:false,
   templateUrl: './admin-dashboard.component.html',
@@ -13,10 +12,8 @@ export class AdminDashboardComponent implements OnInit {
   adminName = '';
   isCollapsed = false;
   showConfirmDialog = false;
-
   // Pie chart data will be set once we fetch from the backend
   pieChartData: any[] = [];
-  
   // A proper Color object based on ngx-charts requirements
   colorScheme: Color = {
     name: 'customScheme',
@@ -24,7 +21,6 @@ export class AdminDashboardComponent implements OnInit {
     group: ScaleType.Ordinal,
     domain: ['#4CAF50', '#F44336']  // For example: green for "Appeared", red for "Not Appeared"
   };
-
   constructor(
     private authService: AuthService, 
     private router: Router,
@@ -32,11 +28,9 @@ export class AdminDashboardComponent implements OnInit {
   ) {
     this.adminName = this.authService.getAdminUsername(); // Retrieves admin's username from storage
   }
-
   ngOnInit(): void {
     this.fetchChartData();
   }
-
   // Fetch chart data from the backend
   fetchChartData(): void {
     this.contestService.getRecentParticipationSummary().subscribe({
@@ -51,25 +45,25 @@ export class AdminDashboardComponent implements OnInit {
       }
     });
   }
-
   // Navigation method for the dashboard create buttons
   navigateTo(path: string): void {
     let navPath = path;
     console.log("@@@@ "  + path)
     // For contests, route is "create-contest" instead of "create"
     if (path === 'contests') {
-      this.router.navigate(['/admin/contests/create-contest']);
-    } else {
-      this.router.navigate([`/admin/${path}/create`]);
+      this.router.navigateByUrl('/admin/contests/create-contest');
+    }
+    else if (path === 'participants') { // or 'contest-participants'
+      this.router.navigateByUrl('/admin/contest-participants/create');
+    }
+     else {
+      this.router.navigateByUrl(`/admin/${path}/create`);
     }
     // this.router.navigate([`/${path}/${navPath}`]);
   }
-  
-
   openConfirm(): void {
     this.showConfirmDialog = true;
   }
-
   handleConfirm(confirmed: boolean): void {
     this.showConfirmDialog = false;
     if (confirmed) {
@@ -77,12 +71,10 @@ export class AdminDashboardComponent implements OnInit {
       this.router.navigate(['/auth/admin/login']);
     }
   }
-
   logout(): void {
     this.authService.logout('admin');
     this.router.navigate(['/auth/admin/login']);
   }
-
   toggleSidebar(): void {
     this.isCollapsed = !this.isCollapsed;
   }

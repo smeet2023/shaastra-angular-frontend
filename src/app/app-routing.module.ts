@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'auth/admin/login', component: LoginAdminComponent },
   { path: 'auth/participant/login', component: LoginParticipantComponent },
+  { path: 'participants', loadChildren: () => import('./contest-participants/contest-participants.module').then(m => m.ContestParticipantsModule) },
   { 
     path: 'admin/dashboard', 
     component: AdminDashboardComponent,
@@ -18,7 +19,7 @@ const routes: Routes = [
     data: { expectedRole: 'admin' }
   },
   { 
-    path: 'participa`nt/dashboard', 
+    path: 'participant/dashboard', 
     component: ParticipantDashboardComponent,
     canActivate: [AuthGuard],
     data: { expectedRole: 'participant' }
@@ -29,6 +30,13 @@ const routes: Routes = [
     loadChildren: () => import('./contests/contests.module').then(m => m.ContestsModule),
     canActivate: [AuthGuard],
     data: { expectedRole: 'admin' }
+  },
+  { 
+    path: 'admin/contest-participants', 
+    loadChildren: () => import('./contest-participants/contest-participants.module').then(m => m.ContestParticipantsModule),
+    canActivate : [AuthGuard],
+    data : {expectedRole : 'admin'}
+    // Optionally, you can add a guard here if needed.
   },
   { path: '**', redirectTo: '' }
 ];

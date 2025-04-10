@@ -1,0 +1,26 @@
+<div class="create-participant-container">
+    <h2>Create Contest Participant</h2>
+    <form [formGroup]="participantForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="sh_id">Student ID (sh_id)</label>
+        <input type="text" id="sh_id" formControlName="sh_id" placeholder="Enter student sh_id">
+        <div *ngIf="participantForm.get('sh_id')?.invalid && participantForm.get('sh_id')?.touched" class="error">
+          Student ID is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="contestId">Contest ID</label>
+        <input type="number" id="contestId" formControlName="contestId" placeholder="Enter contest id">
+        <div *ngIf="participantForm.get('contestId')?.invalid && participantForm.get('contestId')?.touched" class="error">
+          Contest ID is required and must be numeric.
+        </div>
+      </div>
+  
+      <div class="form-actions">
+        <button type="submit" [disabled]="participantForm.invalid">Create Participant</button>
+      </div>
+      <div class="error" *ngIf="submissionError">{{ submissionError }}</div>
+    </form>
+  </div>
+  

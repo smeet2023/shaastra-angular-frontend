@@ -13,7 +13,7 @@ import { ParticipantDashboardComponent } from './participant-dashboard/participa
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ContestProblemsComponent } from './contest-problems/contest-problems.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'; // Import HttpClientModule & HTTP_INTERCEPTORS
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   declarations: [
