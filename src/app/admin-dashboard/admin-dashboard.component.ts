@@ -54,8 +54,17 @@ export class AdminDashboardComponent implements OnInit {
 
   // Navigation method for the dashboard create buttons
   navigateTo(path: string): void {
-    this.router.navigate([`/admin/${path}/create`]);
+    let navPath = path;
+    console.log("@@@@ "  + path)
+    // For contests, route is "create-contest" instead of "create"
+    if (path === 'contests') {
+      this.router.navigate(['/admin/contests/create-contest']);
+    } else {
+      this.router.navigate([`/admin/${path}/create`]);
+    }
+    // this.router.navigate([`/${path}/${navPath}`]);
   }
+  
 
   openConfirm(): void {
     this.showConfirmDialog = true;

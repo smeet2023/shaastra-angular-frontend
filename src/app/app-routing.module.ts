@@ -18,10 +18,17 @@ const routes: Routes = [
     data: { expectedRole: 'admin' }
   },
   { 
-    path: 'participant/dashboard', 
+    path: 'participa`nt/dashboard', 
     component: ParticipantDashboardComponent,
     canActivate: [AuthGuard],
     data: { expectedRole: 'participant' }
+  },
+  // Lazy-load the contests module under /admin/contests
+  { 
+    path: 'admin/contests', 
+    loadChildren: () => import('./contests/contests.module').then(m => m.ContestsModule),
+    canActivate: [AuthGuard],
+    data: { expectedRole: 'admin' }
   },
   { path: '**', redirectTo: '' }
 ];

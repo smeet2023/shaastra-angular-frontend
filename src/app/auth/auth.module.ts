@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { AuthRoutingModule } from './auth-routing.module';
 import { LoginAdminComponent } from './login-admin/login-admin.component';
 import { LoginParticipantComponent } from './login-participant/login-participant.component';
-
 @NgModule({
   declarations: [
     LoginAdminComponent,

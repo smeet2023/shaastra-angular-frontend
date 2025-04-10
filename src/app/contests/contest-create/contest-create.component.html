@@ -1,0 +1,77 @@
+<div class="contest-create-container">
+  <h2>Create New Contest</h2>
+  <form [formGroup]="contestForm" (ngSubmit)="onSubmit()">
+    <!-- Contest Name -->
+    <div class="form-group">
+      <label for="contest_name">Contest Name</label>
+      <input type="text" id="contest_name" formControlName="contest_name" placeholder="Enter contest name">
+      <div *ngIf="contestForm.get('contest_name')?.invalid && contestForm.get('contest_name')?.touched" class="error">
+        Contest name is required and must be under 100 characters.
+      </div>
+    </div>
+
+    <!-- Contest Date -->
+    <div class="form-group">
+      <label for="contest_date">Contest Date</label>
+      <input type="datetime-local" id="contest_date" formControlName="contest_date">
+      <div *ngIf="contestForm.get('contest_date')?.invalid && contestForm.get('contest_date')?.touched" class="error">
+        Contest date is required.
+      </div>
+    </div>
+
+    <!-- Total Participants -->
+    <div class="form-group">
+      <label for="total_participants">Total Participants</label>
+      <input type="number" id="total_participants" formControlName="total_participants" min="0">
+      <div *ngIf="contestForm.get('total_participants')?.invalid && contestForm.get('total_participants')?.touched" class="error">
+        Total participants is required and must be 0 or more.
+      </div>
+    </div>
+
+    <!-- Contest Link -->
+    <div class="form-group">
+      <label for="contest_link">Contest Link</label>
+      <input type="text" id="contest_link" formControlName="contest_link" placeholder="Enter contest link">
+      <div *ngIf="contestForm.get('contest_link')?.invalid && contestForm.get('contest_link')?.touched" class="error">
+        Contest link is required.
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="form-group">
+      <label for="status">Status</label>
+      <select id="status" formControlName="status">
+        <option value="scheduled">Scheduled</option>
+        <option value="ongoing">Ongoing</option>
+        <option value="completed">Completed</option>
+      </select>
+    </div>
+
+    <!-- Contest Description -->
+    <div class="form-group">
+      <label for="contest_description">Contest Description</label>
+      <textarea id="contest_description" formControlName="contest_description" rows="4" placeholder="Enter description"></textarea>
+      <div *ngIf="contestForm.get('contest_description')?.invalid && contestForm.get('contest_description')?.touched" class="error">
+        Contest description is required.
+      </div>
+    </div>
+
+    <!-- Contest Problem Selection -->
+    <div class="form-group">
+      <label for="contestProblemIds">Select Contest Problems</label>
+      <select id="contestProblemIds" formControlName="contestProblemIds" multiple>
+        <option *ngFor="let problem of contestProblemsOptions" [value]="problem.contest_problem_id">
+          {{ problem.problem_title }}
+        </option>
+      </select>
+      <div *ngIf="contestForm.get('contestProblemIds')?.invalid && contestForm.get('contestProblemIds')?.touched" class="error">
+        At least one Contest Problem must be selected.
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="contestForm.invalid">Create Contest</button>
+    </div>
+    <div class="error" *ngIf="submissionError">{{ submissionError }}</div>
+  </form>
+</div>

@@ -2,17 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-
 export interface AuthRequest {
   username: string;
   password: string;
 }
-
 export interface AuthResponse {
   jwt?: string;
   message?: string;
 }
-
 @Injectable({
   providedIn: 'root'
 })
@@ -71,8 +68,6 @@ export class AuthService {
     }
     return '';
   }
-  
-
   // Check if authenticated for a given role
   isAuthenticatedForRole(role: 'admin' | 'participant'): boolean {
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -84,8 +79,6 @@ export class AuthService {
     }
     return false;
   }
-  
-
   // Logout for specified role; remove only that role's keys
   logout(role: 'admin' | 'participant'): void {
     if (role === 'admin') {
@@ -113,7 +106,6 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!(localStorage.getItem('admin_token') || localStorage.getItem('participant_token'));
   }
-
   // Check role based on stored data
   hasRole(role: string): boolean {
     if (role.toLowerCase() === 'admin') {
