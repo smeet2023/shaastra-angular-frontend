@@ -13,6 +13,7 @@ export class ContestCreateComponent implements OnInit {
   contestForm: FormGroup;
   submissionError = '';
   contestProblemsOptions: ContestProblemResrep[] = [];
+  selectedProblems: number[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -47,7 +48,25 @@ export class ContestCreateComponent implements OnInit {
       }
     });
   }
-
+  onCheckboxChange(event: any): void {
+    const problemId = +event.target.value;
+    if (event.target.checked) {
+      // Add the problemId if not already selected
+      if (!this.selectedProblems.includes(problemId)) {
+        this.selectedProblems.push(problemId);
+      }
+    } else {
+      // Remove the problemId
+      this.selectedProblems = this.selectedProblems.filter(id => id !== problemId);
+    }
+    // Update the form control for contestProblemIds
+    this.contestForm.patchValue({
+      contestProblemIds: this.selectedProblems
+    });
+  }
+  isProblemSelected(problemId: number): boolean {
+    return this.selectedProblems.includes(problemId);
+  }
   onSubmit(): void {
     if (this.contestForm.invalid) {
       return;

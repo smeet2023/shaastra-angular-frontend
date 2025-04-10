@@ -58,16 +58,24 @@
 
     <!-- Contest Problem Selection -->
     <div class="form-group">
-      <label for="contestProblemIds">Select Contest Problems</label>
-      <select id="contestProblemIds" formControlName="contestProblemIds" multiple>
-        <option *ngFor="let problem of contestProblemsOptions" [value]="problem.contest_problem_id">
-          {{ problem.problem_title }}
-        </option>
-      </select>
+      <label>Select Contest Problems</label>
+      <div class="checkbox-group">
+        <div *ngFor="let problem of contestProblemsOptions">
+          <label>
+            <input 
+              type="checkbox" 
+              [value]="problem.contest_problem_id" 
+              (change)="onCheckboxChange($event)" 
+              [checked]="isProblemSelected(problem.contest_problem_id)">
+            {{ problem.problem_title }}
+          </label>
+        </div>
+      </div>
       <div *ngIf="contestForm.get('contestProblemIds')?.invalid && contestForm.get('contestProblemIds')?.touched" class="error">
         At least one Contest Problem must be selected.
       </div>
     </div>
+    
 
     <div class="form-actions">
       <button type="submit" [disabled]="contestForm.invalid">Create Contest</button>
