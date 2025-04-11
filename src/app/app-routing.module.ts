@@ -6,12 +6,13 @@ import { AuthGuard } from './auth/auth.guard';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { ParticipantDashboardComponent } from './participant-dashboard/participant-dashboard.component';
 import { HomeComponent } from './home/home.component';
+import { CreateContestResultComponent } from './contest-results/create-contest-result/create-contest-result.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'auth/admin/login', component: LoginAdminComponent },
   { path: 'auth/participant/login', component: LoginParticipantComponent },
-  { path: 'participants', loadChildren: () => import('./contest-participants/contest-participants.module').then(m => m.ContestParticipantsModule) },
+  { path: 'create-contest-result', component: CreateContestResultComponent },
   { 
     path: 'admin/dashboard', 
     component: AdminDashboardComponent,
@@ -25,6 +26,11 @@ const routes: Routes = [
     data: { expectedRole: 'participant' }
   },
   // Lazy-load the contests module under /admin/contests
+  { path: 'admin/contest-results', 
+    loadChildren: () => import('./contest-results/contest-results.module').then(m => m.ContestResultsModule) ,
+    canActivate: [AuthGuard],
+    data: { expectedRole: 'admin' }
+  },
   { 
     path: 'admin/contests', 
     loadChildren: () => import('./contests/contests.module').then(m => m.ContestsModule),

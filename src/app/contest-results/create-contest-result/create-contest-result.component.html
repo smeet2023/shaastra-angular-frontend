@@ -1,0 +1,56 @@
+<div class="create-contest-result-container">
+    <h2>Create Contest Result</h2>
+    <form [formGroup]="resultForm" (ngSubmit)="onSubmit()">
+      
+      <!-- Select Completed Contest -->
+      <div class="form-group">
+        <label for="contest_id">Select Completed Contest</label>
+        <select id="contest_id" formControlName="contest_id">
+          <option value="" disabled>Select a contest</option>
+          <option *ngFor="let contest of completedContests" [value]="contest.contestId">
+            {{ contest.contest_name }} ({{ contest.contest_date }})
+          </option>
+        </select>
+      </div>
+  
+      <!-- Select Participant for that Contest -->
+      <div class="form-group">
+        <label for="participant_id">Select Participant</label>
+        <select id="participant_id" formControlName="participant_id">
+          <option value="" disabled>Select a participant</option>
+          <option *ngFor="let participant of participants" [value]="participant.sh_id">
+            {{ participant.sh_id }}
+          </option>
+        </select>
+      </div>
+  
+      <!-- Score Input -->
+      <div class="form-group">
+        <label for="score">Score</label>
+        <input type="number" id="score" formControlName="score" min="0">
+      </div>
+  
+      <!-- Rank Input -->
+      <div class="form-group">
+        <label for="rank_in_this_contest">Rank in This Contest</label>
+        <input type="number" id="rank_in_this_contest" formControlName="rank_in_this_contest" min="1">
+      </div>
+  
+      <!-- Status Selection -->
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" formControlName="status">
+          <option value="result-not-set">Not Set</option>
+          <option value="result-confirmed">Confirmed</option>
+          <option value="result-invalid">Invalid</option>
+        </select>
+      </div>
+  
+      <div class="form-actions">
+        <button type="submit" [disabled]="resultForm.invalid">Create Contest Result</button>
+      </div>
+  
+      <div class="error" *ngIf="submissionError">{{ submissionError }}</div>
+    </form>
+  </div>
+  
