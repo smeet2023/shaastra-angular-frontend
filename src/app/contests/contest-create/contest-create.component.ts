@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContestService } from '../contests.service';
-import { ContestProblemService, ContestProblemResrep } from '../../contest-problems/contest-problem.service';
+import { ContestProblemService} from '../../contest-problems/contest-problem.service';
+import { ContestProblemResrep } from '../../models/contest-problem-resrep.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -35,19 +36,20 @@ export class ContestCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadContestProblems();
+    // this.loadContestProblems();
   }
 
-  loadContestProblems(): void {
-    this.contestProblemService.getAllContestProblems().subscribe({
-      next: (problems) => {
+  loadContestProblems(contestId: number): void {
+    this.contestProblemService.getProblemsByContestId(contestId).subscribe({
+      next: (problems: ContestProblemResrep[]) => {
         this.contestProblemsOptions = problems;
       },
-      error: (err) => {
+      error: (err: any) => {  // add type annotation to err
         console.error('Error loading contest problems', err);
       }
     });
   }
+  
   onCheckboxChange(event: any): void {
     const problemId = +event.target.value;
     if (event.target.checked) {

@@ -1,56 +1,48 @@
 <div class="create-contest-result-container">
-    <h2>Create Contest Result</h2>
-    <form [formGroup]="resultForm" (ngSubmit)="onSubmit()">
-      
-      <!-- Select Completed Contest -->
-      <div class="form-group">
-        <label for="contest_id">Select Completed Contest</label>
-        <select id="contest_id" formControlName="contest_id">
-          <option value="" disabled>Select a contest</option>
-          <option *ngFor="let contest of completedContests" [value]="contest.contestId">
-            {{ contest.contest_name }} ({{ contest.contest_date }})
-          </option>
-        </select>
-      </div>
+  <h2>Create Contest Result</h2>
   
-      <!-- Select Participant for that Contest -->
-      <div class="form-group">
-        <label for="participant_id">Select Participant</label>
-        <select id="participant_id" formControlName="participant_id">
-          <option value="" disabled>Select a participant</option>
-          <option *ngFor="let participant of participants" [value]="participant.sh_id">
-            {{ participant.sh_id }}
-          </option>
-        </select>
-      </div>
+  <!-- Step 1: Contest Selection -->
+  <div class="contest-selection">
+    <h3>Select a Completed Contest:</h3>
+    <div *ngFor="let contest of completedContests">
+      <label>
+        <input 
+          type="radio" 
+          name="contest" 
+          [value]="contest.contestId" 
+          (change)="onContestSelect(contest.contestId)">
+        {{ contest.contest_name }} ({{ contest.contest_date }})
+      </label>
+    </div>
+  </div>
   
-      <!-- Score Input -->
-      <div class="form-group">
-        <label for="score">Score</label>
-        <input type="number" id="score" formControlName="score" min="0">
-      </div>
-  
-      <!-- Rank Input -->
-      <div class="form-group">
-        <label for="rank_in_this_contest">Rank in This Contest</label>
-        <input type="number" id="rank_in_this_contest" formControlName="rank_in_this_contest" min="1">
-      </div>
-  
-      <!-- Status Selection -->
-      <div class="form-group">
-        <label for="status">Status</label>
-        <select id="status" formControlName="status">
-          <option value="result-not-set">Not Set</option>
-          <option value="result-confirmed">Confirmed</option>
-          <option value="result-invalid">Invalid</option>
-        </select>
-      </div>
-  
-      <div class="form-actions">
-        <button type="submit" [disabled]="resultForm.invalid">Create Contest Result</button>
-      </div>
-  
-      <div class="error" *ngIf="submissionError">{{ submissionError }}</div>
+  <!-- Step 2: Display table with participant scores -->
+  <div *ngIf="selectedContestId && participants.length && contestProblems.length">
+    <h3>Enter Scores for Participants:</h3>
+    <form (ngSubmit)="onSubmit()">
+      <table>
+        <thead>
+          <tr>
+            <th>Participant (SH_ID)</th>
+            <th *ngFor="let problem of contestProblems">{{ problem.problem_title }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let participant of participants">
+            <td>{{ participant.sh_id }}</td>
+            <td *ngFor="let problem of contestProblems">
+              <input type="number" 
+                     min="0" 
+                     [value]="scores[participant.sh_id][problem.contest_problem_id]"
+                     (input)="onScoreChange(participant.sh_id, problem.contest_problem_id, getInputValue($event))"
+                     name="score-{{participant.sh_id}}-{{problem.contest_problem_id}}">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="submit">Submit All Scores</button>
     </form>
   </div>
   
+  <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+</div>

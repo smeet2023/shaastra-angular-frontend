@@ -2,27 +2,22 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { ContestProblemResrep } from '../../app/models/contest-problem-resrep.model';
 
-export interface ContestProblemResrep {
-  contest_problem_id: number;  // Unique identifier for the problem
-  problem_title: string;
-  problem_description: string;
-  problem_solution: string;
-  problem_difficulty: string;
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContestProblemService {
-  private apiUrl = environment.apiUrl;
+  private baseUrl = `${environment.apiUrl}/api/contest-problems`;
 
   constructor(private http: HttpClient) { }
 
-  // Fetch all contest problems available for selection
-  getAllContestProblems(): Observable<ContestProblemResrep[]> {
-    const url = `${environment.apiUrl}/api/contest-problems`;
-    console.log('URL being fetched: ', url);
-    return this.http.get<ContestProblemResrep[]>(`${this.apiUrl}/api/contest-problems`);
+  // Fetch problems by contestId.
+  // Adjust the endpoint if your backend uses a different URL (e.g. /by-contest/{contestId})
+  getProblemsByContestId(contestId: number): Observable<ContestProblemResrep[]> {
+    const url = `${this.baseUrl}/by-contest/${contestId}`;
+    console.log('Fetching contest problems from: ', url);
+    return this.http.get<ContestProblemResrep[]>(url);
   }
 }
