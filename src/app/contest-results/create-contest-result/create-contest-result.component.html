@@ -2,7 +2,7 @@
   <h2>Create Contest Result</h2>
   
   <!-- Step 1: Contest Selection -->
-  <div class="contest-selection">
+  <div class="contest-selection" *ngIf="completedContests && completedContests.length">
     <h3>Select a Completed Contest:</h3>
     <div *ngFor="let contest of completedContests">
       <label>
@@ -16,7 +16,7 @@
     </div>
   </div>
   
-  <!-- Step 2: Display table with participant scores -->
+  <!-- Step 2: Display table with participant scores and extra fields -->
   <div *ngIf="selectedContestId && participants.length && contestProblems.length">
     <h3>Enter Scores for Participants:</h3>
     <form (ngSubmit)="onSubmit()">
@@ -25,6 +25,8 @@
           <tr>
             <th>Participant (SH_ID)</th>
             <th *ngFor="let problem of contestProblems">{{ problem.problem_title }}</th>
+            <th>Rank</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -36,6 +38,21 @@
                      [value]="scores[participant.sh_id][problem.contest_problem_id]"
                      (input)="onScoreChange(participant.sh_id, problem.contest_problem_id, getInputValue($event))"
                      name="score-{{participant.sh_id}}-{{problem.contest_problem_id}}">
+            </td>
+            <!-- Input field for Rank -->
+            <td>
+              <input type="number" 
+                     min="0"
+                     [(ngModel)]="resultExtras[participant.sh_id].rank"
+                     name="rank-{{participant.sh_id}}">
+            </td>
+            <!-- Dropdown for Status -->
+            <td>
+              <select [(ngModel)]="resultExtras[participant.sh_id].status" name="status-{{participant.sh_id}}">
+                <option value="result-not-set">Not Set</option>
+                <option value="result-confirmed">Confirmed</option>
+                <option value="result-invalid">Invalid</option>
+              </select>
             </td>
           </tr>
         </tbody>

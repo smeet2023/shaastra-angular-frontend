@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ContestResultsRoutingModule } from './contest-results-routing.module';
 import { CreateContestResultComponent } from './create-contest-result/create-contest-result.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -13,6 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     ContestResultsRoutingModule
   ]
 })

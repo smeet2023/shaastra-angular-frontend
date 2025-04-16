@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 export class CreateParticipantComponent implements OnInit {
   participantForm: FormGroup;
   submissionError = '';
-
   constructor(
     private fb: FormBuilder,
     private participantService: ContestParticipantsService,
@@ -22,9 +21,7 @@ export class CreateParticipantComponent implements OnInit {
       contestId: ['', [Validators.required, Validators.pattern('^[0-9]+$')]]
     });
   }
-
   ngOnInit(): void { }
-
   onSubmit(): void {
     if (this.participantForm.invalid) {
       return;
@@ -32,7 +29,6 @@ export class CreateParticipantComponent implements OnInit {
     const formValue = { ...this.participantForm.value } as ContestParticipantsResrep;
     // Ensure contestId is a number
     formValue.contestId = +formValue.contestId;
-
     this.participantService.createParticipant(formValue).subscribe({
       next: (data) => {
         alert('Participant created successfully!');

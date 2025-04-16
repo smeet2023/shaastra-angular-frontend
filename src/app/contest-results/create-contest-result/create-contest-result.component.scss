@@ -1,55 +1,92 @@
 .create-contest-result-container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 2rem auto;
-  padding: 1rem;
+  padding: 2rem;
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-  h2, h3 {
+  h2 {
     text-align: center;
+    font-size: 2rem;
     color: #333;
+    margin-bottom: 1.5rem;
   }
 
-  .contest-selection {
-    margin-bottom: 1.5rem;
+  h3 {
     text-align: center;
+    font-size: 1.5rem;
+    color: #444;
+    margin-bottom: 1rem;
+  }
 
+  // Styles for contest selection
+  .contest-selection {
+    text-align: center;
+    margin-bottom: 2rem;
+    
     label {
-      display: block;
-      margin: 0.5rem;
-      font-size: 1rem;
+      display: inline-block;
+      margin: 0 1rem 1rem 0;
+      font-size: 1.2rem;
       cursor: pointer;
+      input {
+        margin-right: 0.5rem;
+      }
     }
   }
 
+  // Table for score entry with extra columns (Rank and Status)
   table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 
-    th, td {
+    thead {
+      background-color: #f1f1f1;
+    }
+    
+    th,
+    td {
+      padding: 0.75rem;
       border: 1px solid #ddd;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    input[type="number"] {
+      width: 80px;
       padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
       text-align: center;
     }
     
-    input[type="number"] {
-      width: 70px;
-      padding: 0.25rem;
+    select {
+      padding: 0.5rem;
       font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff;
     }
   }
 
+  form {
+    text-align: center;
+  }
+
   button {
-    display: block;
-    margin: 0 auto;
-    padding: 0.75rem 2rem;
-    font-size: 1rem;
+    padding: 0.75rem 2.5rem;
+    font-size: 1.1rem;
     background-color: #3f51b5;
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
 
@@ -59,8 +96,9 @@
   }
 
   .error {
-    color: red;
+    color: #d9534f;
     text-align: center;
+    font-size: 1.1rem;
     margin-top: 1rem;
   }
 }
